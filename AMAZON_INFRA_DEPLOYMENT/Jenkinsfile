@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Init Terraform') {
+            steps {
+                sh '''
+                    cd terraform
+                    terraform init
+                '''
+            }
+        }
+
+        stage('Apply Terraform') {
+            steps {
+                sh '''
+                    cd terraform
+                    terraform apply -auto-approve
+                '''
+            }
+        }
+
+        stage('Show Public IP') {
+            steps {
+                sh '''
+                    cd terraform
+                    terraform output instance_public_ip
+                '''
+            }
+        }
+    }
+}
