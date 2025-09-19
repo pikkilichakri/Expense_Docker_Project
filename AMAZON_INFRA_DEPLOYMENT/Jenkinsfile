@@ -5,7 +5,7 @@ pipeline {
         stage('Init Terraform') {
             steps {
                 sh '''
-                    cd terraform
+                    cd AMAZON_INFRA_DEPLOYMENT/terraform
                     terraform init
                 '''
             }
@@ -14,7 +14,7 @@ pipeline {
         stage('Apply Terraform') {
             steps {
                 sh '''
-                    cd terraform
+                    cd AMAZON_INFRA_DEPLOYMENT/terraform
                     terraform apply -auto-approve
                 '''
             }
@@ -23,8 +23,8 @@ pipeline {
         stage('Show Public IP') {
             steps {
                 sh '''
-                    cd terraform
-                    terraform output instance_public_ip
+                    cd AMAZON_INFRA_DEPLOYMENT/terraform
+                    terraform output web_server_ip
                 '''
             }
         }
