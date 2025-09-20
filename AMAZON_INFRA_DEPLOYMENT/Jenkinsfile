@@ -39,7 +39,7 @@ pipeline {
                         docker rm -f expense-app
                     fi
                     # Run the new container
-                    docker run -d --name expense-app -p 9090:80 expense-app
+                    docker run -d --name expense-app -p 9091:80 expense-app
                 '''
             }
         }
