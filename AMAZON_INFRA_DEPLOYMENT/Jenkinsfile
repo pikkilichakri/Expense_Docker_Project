@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: $branch, url: 'https://github.com/pikkilichakri/Expense_Docker_Project.git'
+                git branch: main, url: 'https://github.com/pikkilichakri/Expense_Docker_Project.git'
             }
         }
 
