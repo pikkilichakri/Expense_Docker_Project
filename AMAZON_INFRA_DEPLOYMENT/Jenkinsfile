@@ -1,35 +1,25 @@
 pipeline {
     agent any
-    environment {
-        AWS_ACCESS_KEY_ID = credentials("aws-access-key-id")
-        AWS_SECRET_ACCESS_KEY_ID = credentials("aws-secret-key-id")
-    }
 
     stages {
-        stage('Init Terraform') {
+        stage('Checkout') {
             steps {
-                sh '''
-                    cd AMAZON_INFRA_DEPLOYMENT/terraform
-                    terraform init
-                '''
+                git branch: 'main', url: 'https://github.com/pikkilichakri/Expense_Docker_Project.git'
             }
         }
 
-        stage('Apply Terraform') {
+        stage('Terraform') {
             steps {
-                sh '''
-                    cd AMAZON_INFRA_DEPLOYMENT/terraform
-                    terraform apply -auto-approve
-                '''
-            }
-        }
-
-        stage('Show Public IP') {
-            steps {
-                sh '''
-                    cd AMAZON_INFRA_DEPLOYMENT/terraform
-                    terraform output web_server_ip
-                '''
+                // Inject AWS creds only for this block
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
+                    sh '''
+                        cd AMAZON_INFRA_DEPLOYMENT/terraform
+                        terraform init
+                        terraform validate
+                        terraform plan
+                        terraform apply -auto-approve
+                    '''
+                }
             }
         }
     }
